@@ -112,7 +112,7 @@ marker_luts = { "dev": { "A": create_marker_lut(0, marker_group_counts["dev"]),
                 "comp": { "A": create_marker_lut(100, marker_group_counts["comp"]),
                           "B": create_marker_lut(150, marker_group_counts["comp"]) } }
 
-MarkerBase = namedtuple( "Marker", "info timestamp res vertices centre orientation" ) 
+MarkerBase = namedtuple( "Marker", "info timestamp res vertices centre orientation" )
 class Marker(MarkerBase):
     def __init__( self, *a, **kwd ):
         # Aliases
