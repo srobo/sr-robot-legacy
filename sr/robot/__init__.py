@@ -5,6 +5,5 @@ import log as _log
 
 from robot import ( Robot, NoCameraPresent )
 from power import ( OUT_H0, OUT_H1, OUT_L0, OUT_L1, OUT_L2, OUT_L3 )
-from vision import ( MARKER_ARENA, MARKER_ROBOT, MARKER_TOKEN_A, MARKER_TOKEN_B,
-                   MARKER_TOKEN_C )
+from vision import ( MARKER_ARENA, MARKER_TOKEN )
 from ruggeduino import ( INPUT, OUTPUT, INPUT_PULLUP, Ruggeduino )

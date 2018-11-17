@@ -42,27 +42,17 @@ focal_length_lut = {
     (0x046d, 0x0825): C270_focal_length
 }
 
-MARKER_ARENA, MARKER_ROBOT, MARKER_TOKEN_A, MARKER_TOKEN_B, MARKER_TOKEN_C = 'arena', 'robot', 'token-a', 'token-b', 'token-c'
+MARKER_ARENA, MARKER_TOKEN = 'arena', 'token'
 
 marker_offsets = {
     MARKER_ARENA: 0,
-    MARKER_ROBOT: 28,
+    MARKER_TOKEN: 28,
 }
-MARKER_TOKEN_OFFSET = 32
 
 marker_sizes = {
     MARKER_ARENA: 0.25 * (10.0/12),
-    MARKER_ROBOT: 0.1 * (10.0/12),
-    MARKER_TOKEN_A: 0.2 * (10.0/12),
-    MARKER_TOKEN_B: 0.2 * (10.0/12),
-    MARKER_TOKEN_C: 0.2 * (10.0/12)
+    MARKER_TOKEN: 0.115 * (10.0/12),
 }
-
-token_counts = [
-    (MARKER_TOKEN_A, 4),
-    (MARKER_TOKEN_B, 4),
-    (MARKER_TOKEN_C, 1)
-]
 
 MarkerInfo = namedtuple( "MarkerInfo", "code marker_type offset size" )
 ImageCoord = namedtuple( "ImageCoord", "x y" )
@@ -74,9 +64,9 @@ Point = namedtuple( "Point", "image world polar" )
 # Number of markers per group
 marker_group_counts = {
     "dev": [ ( MARKER_ARENA, 28 ),
-             ( MARKER_ROBOT, 4 ) ],
+             ( MARKER_TOKEN, 4 ) ],
     "comp": [ ( MARKER_ARENA, 28 ),
-              ( MARKER_ROBOT, 4 ) ],
+              ( MARKER_TOKEN, 4 ) ],
 }
 
 def create_marker_lut(offset, counts):
@@ -91,26 +81,14 @@ def create_marker_lut(offset, counts):
                             size = marker_sizes[genre])
             lut[real_code] = m
 
-    # Now add on the token markers
-    base_code = MARKER_TOKEN_OFFSET
-    for marker_type, count in token_counts:
-        for token_count in range(count):
-            real_code = offset + base_code
-
-            m = MarkerInfo( code = base_code,
-                            marker_type = marker_type,
-                            offset = token_count,
-                            size = marker_sizes[marker_type])
-            lut[real_code] = m
-
-            base_code += 1
-
     return lut
 
-marker_luts = { "dev": { "A": create_marker_lut(0, marker_group_counts["dev"]),
-                         "B": create_marker_lut(0, marker_group_counts["dev"]) },
-                "comp": { "A": create_marker_lut(100, marker_group_counts["comp"]),
-                          "B": create_marker_lut(150, marker_group_counts["comp"]) } }
+# While we only have one arena this year, it's much easier to leave the arena
+# handling in place than remove it.
+marker_luts = {
+    "dev": { "A": create_marker_lut(0, marker_group_counts["dev"]) },
+    "comp": { "A": create_marker_lut(100, marker_group_counts["comp"]) },
+}
 
 MarkerBase = namedtuple( "Marker", "info timestamp res vertices centre orientation" )
 class Marker(MarkerBase):
