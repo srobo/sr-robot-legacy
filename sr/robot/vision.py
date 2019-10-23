@@ -42,16 +42,19 @@ focal_length_lut = {
     (0x046d, 0x0825): C270_focal_length
 }
 
-MARKER_ARENA, MARKER_TOKEN = 'arena', 'token'
+MARKER_ARENA, MARKER_TOKEN_GOLD, MARKER_TOKEN_SILVER = 'arena', 'gold-token', 'silver-token'
 
 marker_offsets = {
     MARKER_ARENA: 0,
-    MARKER_TOKEN: 28,
+    MARKER_TOKEN_GOLD: 32,
+    MARKER_TOKEN_SILVER: 40
 }
 
+# TODO
 marker_sizes = {
     MARKER_ARENA: 0.25 * (10.0/12),
-    MARKER_TOKEN: 0.115 * (10.0/12),
+    MARKER_TOKEN_GOLD: 0.25 * (10.0/12),
+    MARKER_TOKEN_SILVER: 0.25 * (10.0/12),
 }
 
 MarkerInfo = namedtuple( "MarkerInfo", "code marker_type offset size" )
@@ -62,12 +65,9 @@ Orientation = namedtuple( "Orientation", "rot_x rot_y rot_z" )
 Point = namedtuple( "Point", "image world polar" )
 
 # Number of markers per group
-marker_group_counts = {
-    "dev": [ ( MARKER_ARENA, 28 ),
-             ( MARKER_TOKEN, 4 ) ],
-    "comp": [ ( MARKER_ARENA, 28 ),
-              ( MARKER_TOKEN, 4 ) ],
-}
+marker_group_counts = ((MARKER_ARENA, 28),
+                       (MARKER_TOKEN_GOLD, 8),
+                       (MARKER_TOKEN_SILVER, 8))
 
 def create_marker_lut(offset, counts):
     lut = {}
@@ -86,8 +86,8 @@ def create_marker_lut(offset, counts):
 # While we only have one arena this year, it's much easier to leave the arena
 # handling in place than remove it.
 marker_luts = {
-    "dev": { "A": create_marker_lut(0, marker_group_counts["dev"]) },
-    "comp": { "A": create_marker_lut(100, marker_group_counts["comp"]) },
+    "dev": { "A": create_marker_lut(0, marker_group_counts) },
+    "comp": { "A": create_marker_lut(100, marker_group_counts) },
 }
 
 MarkerBase = namedtuple( "Marker", "info timestamp res vertices centre orientation" )
